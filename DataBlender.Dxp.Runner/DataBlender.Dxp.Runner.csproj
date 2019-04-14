@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>20134fc0-4b05-45ec-8fb2-e1815555f577</ProjectGuid>
+    <ProjectGuid>{DE2F0181-698D-424F-B370-31F61490934B}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DataBlender.Dxp.Runner</RootNamespace>
@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DSSolutions">
+      <HintPath>..\libraries\DSSolutions.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,6 +46,19 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DataBlender.Dxp.Providers\DataBlender.Dxp.Providers.csproj">
+      <Project>{3cb0f47b-7ff9-4826-b456-a0cf09316ad7}</Project>
+      <Name>DataBlender.Dxp.Providers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DataBlender.Dxp\DataBlender.Dxp.csproj">
+      <Project>{9b6a28d6-0949-424e-a915-bd37558294ae}</Project>
+      <Name>DataBlender.Dxp</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Examples\Pier1Imports.mxd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

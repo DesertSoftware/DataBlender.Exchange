@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DSSolutions">
+      <HintPath>..\libraries\DSSolutions.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -39,8 +42,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExportManager.cs" />
+    <Compile Include="Exports\ExportPackage.cs" />
     <Compile Include="Exports\ExportProvider.cs" />
+    <Compile Include="ImportManager.cs" />
+    <Compile Include="Imports\DataReader.cs" />
+    <Compile Include="Imports\ImportAction.cs" />
+    <Compile Include="Imports\ImportPackage.cs" />
     <Compile Include="Imports\ImportProvider.cs" />
+    <Compile Include="Imports\Setter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

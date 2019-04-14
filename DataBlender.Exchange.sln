@@ -7,6 +7,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBlender.Dxp", "DataBlen
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBlender.Dxp.Providers", "DataBlender.Dxp.Providers\DataBlender.Dxp.Providers.csproj", "{3CB0F47B-7FF9-4826-B456-A0CF09316AD7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBlender.Dxp.Runner", "DataBlender.Dxp.Runner\DataBlender.Dxp.Runner.csproj", "{DE2F0181-698D-424F-B370-31F61490934B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DesertSoftware.Solutions", "DesertSoftware.Solutions", "{E0F27C42-B8C7-4EC3-B0FE-76F67B6041C5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{6259E477-B4DE-412E-AAB8-6C18EA785701}"
+	ProjectSection(SolutionItems) = preProject
+		libraries\DSSolutions.dll = libraries\DSSolutions.dll
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +30,10 @@ Global
 		{3CB0F47B-7FF9-4826-B456-A0CF09316AD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3CB0F47B-7FF9-4826-B456-A0CF09316AD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3CB0F47B-7FF9-4826-B456-A0CF09316AD7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE2F0181-698D-424F-B370-31F61490934B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE2F0181-698D-424F-B370-31F61490934B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE2F0181-698D-424F-B370-31F61490934B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE2F0181-698D-424F-B370-31F61490934B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
