@@ -193,52 +193,89 @@ namespace DataBlender.Dxp.Imports
         /// <param name="targetValues">The target values to assin to.</param>
         /// <param name="evaluator">An evaluator function providing an opportunity to inspect or modify the final value to assign.</param>
         public void Assign(ValueBag sourceValues, ValueBag targetValues, Func<string, string, dynamic, dynamic> evaluator = null) {
-            // {colA} -- {colB} ==> colA}, -- , colB}
-            var sources = new Dictionary<string, dynamic>();
-
             evaluator = evaluator ?? ((source, target, value) => value);
 
             // find all of the source names delimited within {} braces. 
             // scan the tokens, if source element ends in } then we have a column source value
-            var results = expression.Matches(this.Source);
-            foreach (Match match in results) {
-                var token = match.Value.Trim('{', '}');
-                
-                if (!sources.ContainsKey(token))
-                    sources.Add(token, null);
-            } 
-            
-            // If no braces present then use the source statement as is
-            if (sources.Count == 0)
-                sources.Add(this.Source, null);
-
-            // bind the source values to our sources
-            foreach (var source in sources.Keys.ToList()) {
+            if (Interpolator.Interpolations(this.Source).Count == 0) {
                 // if this is a literal assignment the source will begin with a single quote
-                var sourceValue = source.StartsWith("'") 
-                    ? source.Trim("'".ToCharArray()) 
-                    : sourceValues.GetValue(source) ?? this.Default;
+                var sourceValue = this.Source.StartsWith("'")
+                    ? this.Source.Trim("'".ToCharArray())
+                    : sourceValues.GetValue(this.Source) ?? this.Default;
 
                 // if we have a global values clause resolve the sourceValue to a value in the list
                 sourceValue = ResolveToConstrainedValue("*", sourceValue);
 
                 // if we have a source specific values clause; resolve the sourceValue to a value in the list
-                sourceValue = ResolveToConstrainedValue(source, sourceValue);
+                sourceValue = ResolveToConstrainedValue(this.Source, sourceValue);
 
                 // finally bind the result of the evaluator to our sources 
-                sources[source] = evaluator(source, this.Target, sourceValue);
-            }
-
-            // assign the value
-            if (sources.Count > 1) {
-                string interpolation = this.Source;
-
-                foreach (var source in sources.Keys)
-                    interpolation = interpolation.Replace(string.Concat("{", source, "}"), string.Format("{0}", sources[source]));
-
-                targetValues.SetValue(this.Target, interpolation);
+                targetValues.SetValue(this.Target, evaluator(this.Source, this.Target, sourceValue));
             } else
-                targetValues.SetValue(this.Target, sources[this.Source]);
+                targetValues.SetValue(this.Target, evaluator(this.Source, this.Target, 
+                    Interpolator.Interpolate(this.Source, sourceValues, (src, value) => {
+                        // if we have a global values clause resolve the sourceValue to a value in the list
+                        value = ResolveToConstrainedValue("*", value ?? this.Default);
+
+                        // if we have a source specific values clause; resolve the sourceValue to a value in the list
+                        value = ResolveToConstrainedValue(src, value);
+
+                        // finally bind the result of the evaluator 
+                        return evaluator(src, this.Target, value);
+                    })));
+
+            //// {colA} -- {colB} ==> colA}, -- , colB}
+            //var sources = new Dictionary<string, dynamic>();
+            //var results = expression.Matches(this.Source);
+            //foreach (Match match in results) {
+            //    var token = match.Value.Trim('{', '}');
+                
+            //    if (!sources.ContainsKey(token))
+            //        sources.Add(token, null);
+            //} 
+            
+            //// If no braces present then use the source statement as is
+            //if (sources.Count == 0)
+            //    sources.Add(this.Source, null);
+
+            //// bind the source values to our sources
+            //foreach (var source in sources.Keys.ToList()) {
+            //    // if this is a literal assignment the source will begin with a single quote
+            //    var sourceValue = source.StartsWith("'") 
+            //        ? source.Trim("'".ToCharArray()) 
+            //        : sourceValues.GetValue(source) ?? this.Default;
+
+            //    // if we have a global values clause resolve the sourceValue to a value in the list
+            //    sourceValue = ResolveToConstrainedValue("*", sourceValue);
+
+            //    // if we have a source specific values clause; resolve the sourceValue to a value in the list
+            //    sourceValue = ResolveToConstrainedValue(source, sourceValue);
+
+            //    // finally bind the result of the evaluator to our sources 
+            //    sources[source] = evaluator(source, this.Target, sourceValue);
+            //}
+
+            //// assign the value
+            //if (sources.Count > 1) {
+            //    string interpolation = this.Source;
+
+            //    foreach (var source in sources.Keys)
+            //        interpolation = interpolation.Replace(string.Concat("{", source, "}"), string.Format("{0}", sources[source]));
+
+            //    targetValues.SetValue(this.Target, interpolation);
+            //} else
+            //    targetValues.SetValue(this.Target, sources[this.Source]);
+
+            //targetValues.SetValue(this.Target, Console.Interpolate(this.Source, sourceValues, (src, value) => {
+            //        // if we have a global values clause resolve the sourceValue to a value in the list
+            //        value = ResolveToConstrainedValue("*", value ?? this.Default);
+
+            //        // if we have a source specific values clause; resolve the sourceValue to a value in the list
+            //        value = ResolveToConstrainedValue(src, value);
+
+            //        // finally bind the result of the evaluator 
+            //        return evaluator(src, this.Target, value);
+            //    }));
         }
     }
 }

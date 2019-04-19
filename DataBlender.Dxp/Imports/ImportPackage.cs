@@ -64,7 +64,9 @@ namespace DataBlender.Dxp.Imports
                 instance.actions.Add(new ImportAction(package));
 
             if (instance.actions.Count == 0)
-               instance.actions.AddRange(package.Elements().Where(e => e.Name.LocalName.ToLower() != "data").Select(e => new ImportAction(e)));
+               instance.actions.AddRange(package.Elements()
+                   .Where(e => e.Name.LocalName.ToLower() != "data")
+                   .Select(e => new ImportAction(e)));
 
             // count up the dependency references. 
             foreach (var action in instance.actions)

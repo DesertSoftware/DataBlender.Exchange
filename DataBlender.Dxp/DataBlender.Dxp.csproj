@@ -42,6 +42,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interpolator.cs" />
+    <Compile Include="StatementToActionParser.cs" />
+    <Compile Include="Terminal.cs" />
     <Compile Include="ExportManager.cs" />
     <Compile Include="Exports\ExportPackage.cs" />
     <Compile Include="Exports\ExportProvider.cs" />

@@ -45,6 +45,46 @@
     </setup>
 -->
 <import>
+  <importLocations provider="DataBlender.Dxp.Providers.LocationImporter, DataBlender.Dxp.Providers">
+    <description>
+      * Imports the distinct companies, regions, and locations into the system 
+      * if the company, region, or location already exists the import operation is ignored
+    </description>
+    
+    <instructions>
+      <console.print>Importing locations ...</console.print>
+      <import into="location" from="assetData">
+        <let CompanyName="Company" />
+        <let RegionName="Region" />
+        <let SiteName="Location" />
+      </import>
+      <console.print>Importing locations ... done.</console.print>
+      
+      <console.print>Importing companies ...</console.print>
+      <import into="company" from="assetData">
+        <console.print>Importing Company: '{Source.Company}'</console.print>
+        <console.warn>Company '{Source.Company}' already exists</console.warn>
+        <let CompanyName="Company" />
+        <console.error>Name: {Target.CompanyName}</console.error>
+      </import>
+      <console.print>Importing companies ... done.</console.print>
+
+      <import into="region" from="assetData">
+        <let CompanyName="Company" />
+        <let RegionName="Region" />
+      </import>
+
+      <import into="site" from="assetData">
+        <let CompanyName="Company" />
+        <let RegionName="Region" />
+        <let SiteName="Location" />
+      </import>
+    </instructions>
+  </importLocations>
+
+  <!--<importAssets>-->
+  <!--</importAssets>-->
+  
   <updateAlarmDefinitions provider="DataBlender.Dxp.Providers.Pier1Imports, DataBlender.Dxp.Providers">
     <instructions>
       
@@ -75,7 +115,11 @@
     </description>
 
     <instructions>
+      <console.print>Here we go!!! this is some stuff we are printing to the console</console.print>
+
+      <console.print>Executing foreach statement #1</console.print>
       <foreach rowIn="AlarmDefinitions" alarm="source">
+        <console.print>Importing from AlarmDefinitions</console.print>
         <!-- import is an upsert. insert if new; update if exists -->
         <import into="alarm">
           <let source="source" />
@@ -87,6 +131,7 @@
             </case>
           </let>
           <let Name="{source} ({category})" />
+          <console.print>Name: {inserted.Name} from '{AlarmDefinitions.source}' and '{AlarmDefinitions.category}'</console.print>
           <let ResultID="'12'" />
         </import>
         
@@ -99,6 +144,7 @@
         </delete>
       </foreach>
 
+      <console.print>Executing foreach statement #2</console.print>
       <foreach alarm="source" in="AlarmDefinitions">
         <let source="source" />
         <let category="category" default="3">
@@ -146,8 +192,38 @@
   </importAlarms>
 
   <!--<dataformat>csv,xml,other</dataformat>-->
-
+  <data id="assetData" content="System.Data.Csv" source="inline">
+    <![CDATA[
+EquipmentID,SerialNumber,Company,Region,Location,BankPhase,Manufacturer,EquipType,TankCompartment,Model,VoltageClass,Breathing,Cooling,FluidType,FluidVolume,MfgDate,PurchaseDate,PCBConc,Aroclor,MVA,MVA1,MVA2,MVA3,KVPrimary,KVSecondary,KVTertiary,Weight,CoreCoilWeight,Impedance,PhaseCycle,TransformerForm,DeviceApplication,PolicyNumber,LocationNumber,HoseLength,TopFPV,BotFPV,BushingLoc,SVCOnLine,LastTestDate,NextTestdate,EquipmentCondition,EquipmentStatus,Unconfirmed,ClientCode,TJSiteNumber,ClientAccountNumber,TerritoryLevel1,TerritoryLevel2,TerritoryLevel3,TerritoryLevel4,TransactionOrigin,TransactionStatus,TransactionDate,RevIndex,Active,DiagType,EquipmentCategoryForTestSuit,skey
+3051,3051,BHP,Iron Ore,STA Rosa Laguna,,ABB,Transformer,Main,,4.16/0.44,,ONAN,Mineral Oil,2050 kgs,2003,,,,4.5,,,,4.16,0.44,,9300 kgs,,,,,,,,,,,,,,,,,Asset,,,,,,,,6013692,,7/20/2010,,,,,74
+310001,310001,BHP,Iron Ore,Paraburdoo Mine,Aux T326,Wilson,Transformer,Main,,11/0.433,,ONAN,Mineral Oil,1050 L,2008,,,,0.75,,,,11,0.433,,,2340 kg,,,,,,,,,,,,,,,,,,,,,,,,6013692,,3/29/2016,,,,,48658
+318,318,BHP,Iron Ore,CFSPM Elizabeth City Centre,TX,Schneider,Transformer,Main,,11/0.433,,,Mineral Oil,1000 L,2003,,,,1,,,,11,0.433,,,,,,,,,,,,,,,,,,,Asset,,,,,,,,6013692,,3/12/2013,,,,,43164
+320001,320001,BHP,Iron Ore,Xstrata Mt. Isa,MIM 233- MIT Tank T14 Earthing,Wilson,Transformer,Main,,11/0.44,,ONAN,Mineral Oil,575 L,,,,,0.15,,,,11,0.44,,,11000,,,,,,,,,,,,,,,,,,,,,,,,6013692,,10/23/2018,,,,,76
+320004,320004,BHP,Iron Ore,Xstrata Mt. Isa,X42 ETX MIM 254,Wilson,Transformer,Main,,11/0.44,,ONAN,Mineral Oil,575 L,,,,,0.15,,,,11,0.44,,,11000,,,,,,,,,,,,,,,,,,,,,,,,6013692,,11/1/2018,,,,,55846
+0032-0007,0032-0007,BHP,Iron Ore,Mt Isa Mines,MIM 263 - Pendine St - T4 ETX,,Transformer,Main,,132/33/11,,,Mineral Oil,29300 L,2018,,,,60,,,,132,33,11,,,,,,,,,,,,,,,,,,Asset,,,,,,,,6013692,,10/23/2018,,,,,71922
+325,325,BHP,Iron Ore,BHP Cannington,TF49209,Schneider,Transformer,Main,,11/0.433,,,Mineral Oil,1900L,2003,,,,2,,,,114,0.433,,,,,,,,,,,,,,,,,,,Asset,,,,,,,,6013692,,5/12/2015,,,,,56732
+330001,330001,BHP,Iron Ore,Alcoa,Pre Heat Run,Wilson,Transformer,Main,,22/0.433,,ONAN/ONAF,Mineral Oil,1385 L,2008,,,,1/1.4,,,,22,0.433,,,1135 kgs,,,,,,,,,,,,,,,,Asset,,,,,,,,6013692,,9/25/2008,,,,,77
+00330001A,00330001A,BHP,Iron Ore,Alcoa,Post Heat Run,Wilson,Transformer,Main,,22/0.433,,ONAN/ONAF,Mineral Oil,1385 L,2008,,,,1/1.4,,,,22,0.433,,,1135 kgs,,,,,,,,,,,,,,,,Asset,,,,,,,,6013692,,9/25/2008,,,,,78
+00330001PA,00330001PA,BHP,Iron Ore,Portland Aluminium,011T-5,Wilosn,Transformer,Main,,22/0.433,,,Mineral Oil,1385 L,2008,,,,1,,,,22,0.433,,,,,,,,,,,,,,,,,,,Asset,,,,,,,,6013692,,10/20/2008,,,,,79
+335,335,BHP,Iron Ore,Viridian Clayton,Sub 2 TX2,Schneider,Transformer,Main,,22,,,Mineral Oil,1800 L,2002,,<0.6,,2,,,,22,,,,,,,,,,,,,,,,,,,,,,,,,,,,6013692,,12/4/2018,,,,,38868
+342,342,BHP,Iron Ore,Thales Mulwala,Centre Sub 17 TX17,Schneider,Transformer,Main,,22/0.415,,,Mineral Oil,810 L,2003,,<1,,0.5,,,,22,0.415,,,,,,,,,,,,,,,,,,,,nil.sa,601,,,,,,6013692,,5/24/2018,,,,,80
+347,347,BHP,Iron Ore,Stocklands Rockhampton Car Park,TX 4,Schneider,Transformer,Main,,11/0.433,Free,ONAN,Mineral Oil,930 L,2003,,,,1,,,,11,0.433,,,1470 KG,,,,,,,,,,,,,,,,Asset,,,,,,,,6013692,,3/17/2016,,,,,60967
+    ]]>    
+  </data>"
+  
   <data id="AlarmDefinitions" content="System.Data.Csv" source="inline">
+    <![CDATA[
+Equipment Type,Category,Severity,Description,Status,Source,Long Description,Definition,Prognostic,Recommended Actions,,
+Transformers,OTHER,WARNING,PD 1 DEVICE SYSTEM OFF ALARM,ENABLED,PD_1_DEVICE_ON_AL,,,,,,
+Transformers,OTHER,WARNING,PD 1 DEVICE STATUS GOOD,ENABLED,PD_1_DEVICE_STAT_AL,,,,,,
+Transformers,MINOR,WARNING,PD 1 WARNING ALARM,ENABLED,PD_1_WARNING_AL,,,,,,
+Transformers,MINOR,WARNING,PD 1 ALARM,ENABLED,PD_1_ALARM_AL,,,,,,
+Transformers,MINOR,WARNING,PD 1 MAXIMUM AMPLITUDE ALARM,ENABLED,PD_1_MAX_AMP_AL,,,,,,
+Transformers,MINOR,WARNING,PD 1 VOLTAGE ALARM,ENABLED,PD_1_VOLT_AL,,,,,,
+]]>
+  </data>  
+
+  <data id="AllAlarmDefinitions" content="System.Data.Csv" source="inline">
     <![CDATA[
 Equipment Type,Category,Severity,Description,Status,Source,Long Description,Definition,Prognostic,Recommended Actions,,
 Breakers,OTHER,WARNING,BREAKER IS OPEN ALARM,ENABLED,BREAKER_IS_OPEN,The Breaker is Open,The Breaker is Open,None,Determine if this is the correct condition.,,

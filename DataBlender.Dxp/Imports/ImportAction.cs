@@ -58,8 +58,8 @@ namespace DataBlender.Dxp.Imports
             this.providerAttribute = source.Attribute("provider");
             this.instructionsElement = source.Element("instructions");
 
-            if (this.providerAttribute == null) throw new Exception(string.Format("{0} element is missing the provider attribute", source.Name.LocalName));
-            if (this.instructionsElement == null) throw new Exception("Import action does not contain an instructions element");
+            if (this.providerAttribute == null) throw new Exception(string.Format("{0} is missing a provider attribute", source.Name.LocalName));
+            if (this.instructionsElement == null) throw new Exception(string.Format("{0} does not contain an instructions element", source.Name.LocalName));
 
             XAttribute breakOnErrorAttribute = this.source.Attribute("breakOnError");
             if (breakOnErrorAttribute != null)
