@@ -18,9 +18,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+
+using DesertSoftware.Solutions.Dynamix;
+using DesertSoftware.Solutions.Dynamix.Extensions;
 
 namespace DataBlender.Dxp.Imports
 {
@@ -34,6 +38,45 @@ namespace DataBlender.Dxp.Imports
         private List<ImportAction> actions = new List<ImportAction>();
         private Dictionary<string, ImportAction> indexedActions = new Dictionary<string, ImportAction>(StringComparer.CurrentCultureIgnoreCase);
         private List<XElement> data = new List<XElement>();
+
+        static public ImportPackage Load(XElement package, TextReader dataSource) {
+            if (package == null) throw new ArgumentNullException("package");
+
+//            ValueBag.ToDictionary(new { first = 1, second = 2 }.ToValueBag());
+
+            // locate the first data element if any exist
+            XElement dataElement = package.Elements("data").FirstOrDefault();
+
+            // if we do not have any data elements, add csv inline data source without an ID
+            if (dataElement == null) {
+                dataElement = new XElement("data", new XCData(""));
+
+                // <data id="importData" content="System.Data.Csv" source="inline">
+                dataElement.SetAttributeValue("content", "System.Data.Csv");
+                dataElement.SetAttributeValue("source", "inline");
+                package.Add(dataElement);
+            }
+
+            // update the dataElement contents with the contents of dataSource
+            using (var writer = new StringWriter()) {
+                using (dataSource) {
+                    string row = dataSource.ReadLine();
+
+                    while (row != null) {
+                        // remove empty lines. treat lines of ,,,,, as empty
+                        if (!string.IsNullOrWhiteSpace(row.Replace(",", "")))
+                            writer.WriteLine(row);
+
+                        row = dataSource.ReadLine();
+                    }
+                }
+
+                // update the dataElement content
+                dataElement.ReplaceNodes(new XCData(writer.ToString()));
+            }
+
+            return ImportPackage.Load(package);
+        }
 
         /// <summary>
         /// Loads the specified package.

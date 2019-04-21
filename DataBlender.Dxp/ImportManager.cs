@@ -77,20 +77,17 @@ namespace DataBlender.Dxp
         /// <summary>
         /// Imports the specified import package.
         /// </summary>
-        /// <param name="importPackage">The import package.</param>
+        /// <param name="package">The package.</param>
         /// <param name="log">The log.</param>
-        /// <param name="context">The import context information.</param>
-        /// <exception cref="System.ArgumentNullException">intakePackage</exception>
-        /// <exception cref="System.Exception"></exception>
-        static public void Import(XElement importPackage, Action<int, string> log = null, dynamic context = null) {
-            if (importPackage == null) throw new ArgumentNullException("importPackage");
+        /// <param name="context">The context.</param>
+        /// <exception cref="System.ArgumentNullException">package</exception>
+        static public void Import(ImportPackage package, Action<int, string> log = null, dynamic context = null) {
+            if (package == null) throw new ArgumentNullException("package");
 
             log = log ?? NullLogger;    // ensure we have a logger of some sort
             log.Info("Import started");
 
             try {
-                var package = ImportPackage.Load(importPackage);
-
                 // instantiate each action actor and perform the import
                 foreach (var action in package.Actions.Where(a => a.References == 0)) {
                     try {
@@ -105,7 +102,48 @@ namespace DataBlender.Dxp
             } catch (Exception ex) {
                 log.Error(ex.Message);
                 log.Info("Import aborted");
-                return;
+            }
+        }
+
+        /// <summary>
+        /// Imports the specified import package.
+        /// </summary>
+        /// <param name="importPackage">The import package.</param>
+        /// <param name="dataSource">The data source.</param>
+        /// <param name="log">The log.</param>
+        /// <param name="context">The context.</param>
+        /// <exception cref="System.ArgumentNullException">importPackage</exception>
+        /// <exception cref="System.ArgumentException">dataSource</exception>
+        static public void Import(XElement importPackage, TextReader dataSource, Action<int, string> log = null, dynamic context = null) {
+            if (importPackage == null) throw new ArgumentNullException("importPackage");
+            if (dataSource == null) throw new ArgumentException("dataSource");
+
+            log = log ?? NullLogger;    // ensure we have a logger of some sort
+
+            try {
+                Import(ImportPackage.Load(importPackage, dataSource), log, context);
+            } catch (Exception ex) {
+                log.Error(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Imports the specified import package.
+        /// </summary>
+        /// <param name="importPackage">The import package.</param>
+        /// <param name="log">The log.</param>
+        /// <param name="context">The import context information.</param>
+        /// <exception cref="System.ArgumentNullException">intakePackage</exception>
+        /// <exception cref="System.Exception"></exception>
+        static public void Import(XElement importPackage, Action<int, string> log = null, dynamic context = null) {
+            if (importPackage == null) throw new ArgumentNullException("importPackage");
+
+            log = log ?? NullLogger;    // ensure we have a logger of some sort
+
+            try {
+                Import(ImportPackage.Load(importPackage), log, context);
+            } catch (Exception ex) {
+                log.Error(ex.Message);
             }
         }
 
