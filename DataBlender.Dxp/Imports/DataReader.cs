@@ -55,16 +55,16 @@ namespace DataBlender.Dxp.Imports
         /// <param name="detectDateTimeValues">if set to <c>true</c> detect date time values.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">data</exception>
-        static public DataReader Load(XElement data, bool detectDateTimeValues = true) {
+        static public DataReader Load(XElement data) {
             if (data == null) throw new ArgumentNullException("data");
 
             var dataReader = new DataReader();
 
-            // a "data" element is comprised of the following attributes (id, content, and source) and the elements contents
+            // a "data" element is comprised of the following attributes (id, content, source, and options) and the data contents
             // the "id" attribute assigns a name to the data element. It is optional and should be unique when multiple data 
-            // elements are defined
+            // elements are defined. 
 
-            // <data id="{id}" content="System.Data.Csv" source="inline">
+            // <data id="{id}" content="System.Data.Csv" source="inline" options="DetectDateTime">
             //   <!-- A snippet of data from a TOA export -->
             //   <![CDATA[
             //     ID,EQUIPNUM,APPRTYPE,TANK,SAMPLEDATE,SAMPLENUM
@@ -78,17 +78,20 @@ namespace DataBlender.Dxp.Imports
             // the "source" attribute specifies where to obtain the data from. If not declared, inline is assumed
             string source = data.Attribute("source") != null ? data.Attribute("source").Value : "inline";
 
+            // the options attribute provides functionality to pass additional behavior options to provider reading the data
+            string options = data.Attribute("options") != null ? data.Attribute("options").Value : "";
+
             switch (source.ToLower()) {
                 case "":
                 case "inline":
                     switch (content.ToLower()) {
                         case "system.data.csv":
                         case "csv":
-                            dataReader.data = new CsvReader(new StringReader(data.Value.Trim())).ReadAllLines(detectDateTimeValues);
+                            dataReader.data = new CsvReader(new StringReader(data.Value.Trim())).ReadAllLines(options);
                             break;
 
                         default:
-                            dataReader.data = new CsvReader(new StringReader(data.Value.Trim())).ReadAllLines(detectDateTimeValues);
+                            dataReader.data = new CsvReader(new StringReader(data.Value.Trim())).ReadAllLines(options);
                             break;
                     }
                     break;
@@ -97,11 +100,11 @@ namespace DataBlender.Dxp.Imports
                     switch (content.ToLower()) {
                         case "system.data.csv":
                         case "csv":
-                            dataReader.data = new CsvReader(source).ReadAllLines(detectDateTimeValues);
+                            dataReader.data = new CsvReader(source).ReadAllLines(options);
                             break;
 
                         default:
-                            dataReader.data = new CsvReader(source).ReadAllLines(detectDateTimeValues);
+                            dataReader.data = new CsvReader(source).ReadAllLines(options);
                             break;
                     }
                     break;
