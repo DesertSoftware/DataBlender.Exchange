@@ -1,5 +1,5 @@
 ﻿/* 
-//  Copyright Desert Software Solutions, Inc 2014
+//  Copyright Desert Software Solutions, Inc 2019
 //  Data Exchange Platform - Data Blender imports
 
 // Copyright (c) 2014 Desert Software Solutions Inc. All rights reserved.

@@ -30,8 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DSSolutions">
-      <HintPath>..\libraries\DSSolutions.dll</HintPath>
+    <Reference Include="DesertSoftware.Solutions, Version=1.3.19.815, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DesertSoftware.Solutions.1.3.19.815\lib\net40\DesertSoftware.Solutions.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -55,6 +56,9 @@
     <Compile Include="Imports\ImportProvider.cs" />
     <Compile Include="Imports\Setter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

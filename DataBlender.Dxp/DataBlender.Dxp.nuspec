@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>DataBlender.Exchange</id>
+    <version>$version$</version>
+    <authors>DesertSoftware</authors>
+    <owners>DesertSoftware</owners>
+    <title>Data Blender Exchange Platform</title>
+    <summary>Data import and export functions.</summary>
+    <description>The Desert Software Data Blender Exchange platform provides functionality for building data imports and exports</description>
+    <tags>data import export exchange datablender desertsoftware</tags>
+    <license type="expression">Apache-2.0</license>
+    <projectUrl>https://github.com/desertsoftware/datablender.exchange</projectUrl>
+    <!--<iconUrl>https://raw.githubusercontent.com/desertsoftware/desertsoftware.commandconsole/master/Assets/CommandConsole_128x128.png</iconUrl>-->
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <copyright>© Desert Software Solutions Inc. All rights reserved.</copyright> 
+  </metadata>
+</package>

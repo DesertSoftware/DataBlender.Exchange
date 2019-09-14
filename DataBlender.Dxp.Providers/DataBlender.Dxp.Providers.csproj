@@ -30,8 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DSSolutions">
-      <HintPath>..\libraries\DSSolutions.dll</HintPath>
+    <Reference Include="DesertSoftware.Solutions, Version=1.3.19.815, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DesertSoftware.Solutions.1.3.19.815\lib\net40\DesertSoftware.Solutions.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -52,6 +53,9 @@
       <Project>{9b6a28d6-0949-424e-a915-bd37558294ae}</Project>
       <Name>DataBlender.Dxp</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
